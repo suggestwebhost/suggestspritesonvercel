@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Free Sprites Cloud & API</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://jsdelivr.net" rel="stylesheet">
+    <style>
+        body { background-color: #f8f9fa; font-family: system-ui, -apple-system, sans-serif; }
+        .sprite-card { transition: transform 0.2s; }
+        .sprite-card:hover { transform: translateY(-4px); box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        .sprite-img-container { background-image: linear-gradient(45deg, #e0e0e0 25%, transparent 25%), linear-gradient(-45deg, #e0e0e0 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #e0e0e0 75%), linear-gradient(-45deg, transparent 75%, #e0e0e0 75%); background-size: 20px 20px; background-position: 0 0, 0 10px, 10px -10px, -10px 0px; background-color: #f1f1f1; display: flex; align-items: center; justify-content: center; height: 120px; }
+        .sprite-img { max-height: 100px; max-width: 100px; image-rendering: pixelated; }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar navbar-dark bg-dark mb-4">
+        <div class="container">
+            <span class="navbar-brand mb-0 h1">👾 SpriteVault Hub & API</span>
+            <a href="/api/sprites" target="_blank" class="btn btn-outline-info btn-sm">Test JSON API</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="row g-4">
+            <!-- Left Column: Upload Form -->
+            <div class="col-lg-4">
+                <div class="card shadow-sm border-0 position-sticky" style="top: 20px;">
+                    <div class="card-body">
+                        <h4 class="card-title mb-3">Bulk Upload Sprites</h4>
+                        <form action="/upload" method="POST" enctype="multipart/form-data">
+                            
+                            <div class="mb-3">
+                                <label for="sprites" class="form-label font-weight-bold">Select Sprite Files</label>
+                                <input type="file" class="form-control" id="sprites" name="sprites" accept="image/png, image/gif, image/jpeg" multiple required>
+                                <small class="text-muted">You can select up to 10+ files at once using Ctrl / Cmd keys.</small>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="category" class="form-label">Category</label>
+                                <select class="form-select" id="category" name="category">
+                                    <option value="characters">Characters</option>
+                                    <option value="items">Items / Loot</option>
+                                    <option value="tilesets">Tilesets / Environment</option>
+                                    <option value="ui">UI Elements</option>
+                                    <option value="effects">FX / Particles</option>
+                                </select>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="tags" class="form-label">Tags (Comma separated)</label>
+                                <input type="text" class="form-control" id="tags" name="tags" placeholder="pixel, 16bit, blue, running">
+                            </div>
+
+                            <button type="submit" class="btn btn-primary w-100">Upload All Selected</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Column: Gallery Catalog -->
+            <div class="col-lg-8">
+                <h3 class="mb-3">Your Hosted Sprites ({{ sprites|length }})</h3>
+                
+                {% if not sprites %}
+                <div class="alert alert-warning">No sprites uploaded yet! Drop a few files in the form to get started.</div>
+                {% endif %}
+
+                <div class="row row-cols-2 row-cols-md-3 row-cols-xl-4 g-3">
+                    {% for sprite in sprites %}
+                    <div class="col">
+                        <div class="card h-100 border-0 shadow-sm sprite-card">
+                            <div class="sprite-img-container rounded-top">
+                                <img src="{{ sprite.image_url }}" class="sprite-img" alt="{{ sprite.name }}">
+                            </div>
+                            <div class="card-body p-2">
+                                <h6 class="card-title text-truncate mb-1" title="{{ sprite.name }}">{{ sprite.name }}</h6>
+                                <span class="badge bg-secondary mb-1">{{ sprite.category }}</span>
+                                <div class="text-muted small text-truncate">
+                                    {% for tag in sprite.tags %}
+                                    <span class="text-info">#{{ tag }}</span>
+                                    {% endfor %}
+                                </div>
+                                <hr class="my-2">
+                                <code class="user-select-all d-block text-truncate" style="font-size: 0.75rem;">/api/sprites/{{ sprite._id }}</code>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="text-center text-muted mt-5 py-4 border-top">
+        <p class="small">SpriteVault Web Dashboard & API Server setup</p>
+    </footer>
+
+</body>
+</html>
