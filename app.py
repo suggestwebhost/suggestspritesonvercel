@@ -23,7 +23,7 @@ try:
 except Exception:
     db = client['sprites_db']
 
-sprites_collection = db.sprites
+sprites_collection = db['sprites']
 
 
 
