@@ -12,7 +12,7 @@ app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16MB Max upload size
 # MongoDB Cloud Cluster Connection
 # ==================== CLOUD ENVIRONMENT CONFIGURATION ====================
 # MongoDB Cloud Cluster Connection
-MONGO_URI = os.environ.get('MONGO_URI', 'mongodb://localhost:27017/sprites_db')
+MONGO_URI = os.environ.get('MONGO_URI')
 client = MongoClient(MONGO_URI)
 
 # Fallback gracefully if Vercel's MONGO_URI lacks a trailing /database_name
