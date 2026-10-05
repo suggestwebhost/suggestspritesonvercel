@@ -10,10 +10,22 @@ app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16MB Max upload size
 
 # ==================== CLOUD ENVIRONMENT CONFIGURATION ====================
 # MongoDB Cloud Cluster Connection
-MONGO_URI = os.environ.get('MONGO_URI')
+# ==================== CLOUD ENVIRONMENT CONFIGURATION ====================
+# MongoDB Cloud Cluster Connection
+MONGO_URI = os.environ.get('MONGO_URI', 'mongodb://localhost:27017/sprites_db')
 client = MongoClient(MONGO_URI)
-db = client['sprites_db']
+
+# Fallback gracefully if Vercel's MONGO_URI lacks a trailing /database_name
+try:
+    db = client.get_default_database()
+    if db is None:
+        db = client['sprites_db']
+except Exception:
+    db = client['sprites_db']
+
 sprites_collection = db.sprites
+
+
 
 # Cloudinary Infinite Storage Configuration
 # You will get this URL from your free Cloudinary dashboard settings page
