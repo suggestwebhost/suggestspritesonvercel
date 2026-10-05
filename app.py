@@ -17,7 +17,7 @@ client = MongoClient(MONGO_URI)
 
 # Fallback gracefully if Vercel's MONGO_URI lacks a trailing /database_name
 try:
-    db = client['sprites_db']
+    db = client['sprites_db1']
     if db is None:
         db = client['sprites_db']
 except Exception:
