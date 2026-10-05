@@ -20,6 +20,7 @@ try:
     db = client['sprites_db1']
     if db is None:
         db = client['sprites_db']
+        sprites_collection = db.sprites
 
 except Exception:
     db = client['sprites_db']
