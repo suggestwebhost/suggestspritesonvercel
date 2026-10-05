@@ -1,4 +1,5 @@
 Flask==3.0.3
+bson
 pymongo[srv]
 dnspython==2.6.1
 Werkzeug==3.0.3
