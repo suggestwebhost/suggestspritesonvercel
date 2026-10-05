@@ -23,7 +23,7 @@ try:
 except Exception:
     db = client['sprites_db']
 
-sprites_collection = db['sprites']
+sprites_collection = db.sprites
 if sprites_collection.count_documents({}) == 0:
         # Pushing a system initialization marker forces Atlas to physically create the DB
         sprites_collection.insert_one({"_init": True, "name": "System Init Stub"})
