@@ -13,7 +13,13 @@ app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16MB Max upload size
 # ==================== CLOUD ENVIRONMENT CONFIGURATION ====================
 # MongoDB Cloud Cluster Connection
 MONGO_URI = os.environ.get('MONGO_URI')
-client = MongoClient(MONGO_URI)
+client = MongoClient(
+    MONGO_URI,
+    serverSelectionTimeoutMS=2000, # Max 2 seconds to find server (prevents infinite hanging)
+    connectTimeoutMS=2000,         # Max 2 seconds to establish socket
+    retryWrites=True
+)
+
 client.admin.command("ping")
 print("Connected successfully!")
 
