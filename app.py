@@ -20,7 +20,6 @@ try:
     db = client['sprites_db1']
     if db is None:
         db = client['sprites_db']
-        sprites_collection = db.sprites
 
 except Exception:
     db = client['sprites_db']
@@ -54,8 +53,20 @@ else:
 
 @app.route('/')
 def index():
-    sprites = list(sprites_collection.find())
-    return render_template('index.html', sprites=sprites)
+    try:
+        raw_sprites = list(sprites_collection.find())
+        sprites = []
+        
+        for s in raw_sprites:
+            # Convert the ObjectId to a standard string format safely
+            s['_id'] = str(s['_id'])
+            sprites.append(s)
+            
+        return render_template('index.html', sprites=sprites)
+    except Exception as e:
+        # This prevents a total crash and prints the exact issue to your Render logs
+        return f"Database Fetch Error: {str(e)}", 500
+
 
 @app.route('/upload', methods=['POST'])
 def upload_sprites():
