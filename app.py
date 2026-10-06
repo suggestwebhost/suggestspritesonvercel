@@ -21,17 +21,16 @@ try:
     if db is None:
         db = client['sprites_db']
         sprites_collection = db.sprites
+        print("MongoDB database and 'sprites' collection     initialized successfully.")
+    if sprites_collection.count_documents({}) == 0:
+        	sprites_collection.insert_one({"_init": True, "name": "System Init Stub"})
+        	sprites_collection.delete_many({"_init": True})
+        	print("MongoDB database and 'sprites' collection initialized successfully.")
 
 except Exception:
     db = client['sprites_db']
 
-    sprites_collection = db.sprites
-    print("MongoDB database and 'sprites' collection     initialized successfully.")
-    if sprites_collection.count_documents({}) == 0:
-        # Pushing a system initialization marker forces Atlas to physically create the DB
-        sprites_collection.insert_one({"_init": True, "name": "System Init Stub"})
-        sprites_collection.delete_many({"_init": True}) # Clean it up instantly
-        print("MongoDB database and 'sprites' collection initialized successfully.")
+    
 except Exception as e:
     print(f"Database connection initialization failed: {str(e)}")
 
