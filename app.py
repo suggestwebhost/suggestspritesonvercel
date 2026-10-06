@@ -14,11 +14,13 @@ app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16MB Max upload size
 # MongoDB Cloud Cluster Connection
 MONGO_URI = os.environ.get('MONGO_URI')
 client = MongoClient(MONGO_URI)
+client.admin.command("ping")
+print("Connected successfully!")
 
 # Fallback gracefully if Vercel's MONGO_URI lacks a trailing /database_name
 try:
     db = client['sprites_db']
-    if db is None:
+    if db is not None:
         db = client['sprites_db']
         sprites_collection = db.sprites
         print("MongoDB database and 'sprites' collection     initialized successfully.")
